@@ -1,6 +1,6 @@
 # cl-monty-hall
 
-Tests the solution to the Monty Hall Problem using Monte Carlo
+Tests the solution to the [Monty Hall Problem](https://en.m.wikipedia.org/wiki/Monty_Hall_problem) using Monte Carlo
 
 ## Setup
 
