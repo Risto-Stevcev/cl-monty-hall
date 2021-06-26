@@ -25,14 +25,20 @@
 (declaim (ftype (function (integer boolean) t) play))
 (defun play (num-doors swap-choice)
   "Play the Monty Hall game"
-  (let* (; 1. Initialize with car randomly placed somewhere
+  (let* (;; 1. Initialize with car randomly placed somewhere
          (car-door (-> num-doors random (+ 1)))
-         ; 2. Guest picks a door (simulate randomly missing the car)
+         ;; 2. Guest picks a door (simulate randomly missing the car)
          (guest-door-choice (-> num-doors random (+ 1)))
-         ; 3. Host picks a door (chooses a door with a goat)
+         ;; 3. Host picks a door (chooses a door with a goat)
          (host-goat-door-choice (random-with-exclusions num-doors `(,car-door ,guest-door-choice)))
-         ; Host points to another door that the guest can swap
-         (host-swap-door-choice (random-with-exclusions num-doors `(,guest-door-choice ,host-goat-door-choice))))
+         ;; Host points to another door that the guest can swap
+         (host-swap-door-choice
+           (if (= car-door guest-door-choice)
+               ;; If the guest chose the car door, then the host chooses another
+               ;; random door ith a goat
+               (random-with-exclusions num-doors `(,guest-door-choice ,host-goat-door-choice))
+               ;; Otherwise, choose the car door (guest doesn't know)
+               car-door)))
     (if swap-choice (= car-door host-swap-door-choice)
         (= car-door guest-door-choice))))
 
@@ -53,7 +59,7 @@
   "Sorts an alist by key given a function f"
   (stable-sort alist f :key #'car))
 
-; Simulate N rounds where guest won't swap vs will swap
+;; Simulate N rounds where guest won't swap vs will swap
 (declaim (ftype (function (&key (:num-doors integer) (:switch-choice boolean) (:num-rounds integer)) list-of) test))
 (defun test (&key num-doors switch-choice (num-rounds 10000))
   (let ((rounds (make-list num-rounds)))
@@ -72,26 +78,22 @@
    `(:switch ,(test :num-doors num-doors :switch-choice t :num-rounds num-rounds)))
   (terpri))
 
-; The probability looks like it's how it's stated in the original problem,
-; 2/3 change you get the car if you switch and 1/3 change if you don't switch:
 (run 3 :num-rounds 1000000)
-;(:KEEP ((T . 333019) (NIL . 666981)))
-;(:SWITCH ((T . 666849) (NIL . 333151)))
+;;(:KEEP ((T . 334409) (NIL . 665591)))
+;;(:SWITCH ((T . 666442) (NIL . 333558)))
 
-; However, the difference between choosing the door and not doesn't make much difference at a large
-; enough number:
 (run 4 :num-rounds 1000000)
-;(:KEEP ((T . 249201) (NIL . 750799)))
-;(:SWITCH ((T . 375739) (NIL . 624261)))
+;;(:KEEP ((T . 250303) (NIL . 749697)))
+;;(:SWITCH ((T . 749986) (NIL . 250014)))
 
 (run 5 :num-rounds 1000000)
-;(:KEEP ((T . 199814) (NIL . 800186)))
-;(:SWITCH ((T . 266971) (NIL . 733029)))
+;;(:KEEP ((T . 200124) (NIL . 799876)))
+;;(:SWITCH ((T . 799602) (NIL . 200398)))
 
 (run 20 :num-rounds 1000000)
-;(:KEEP ((T . 49776) (NIL . 950224)))
-;(:SWITCH ((T . 52837) (NIL . 947163)))
+;;(:KEEP ((T . 49878) (NIL . 950122)))
+;;(:SWITCH ((T . 949733) (NIL . 50267)))
 
 (run 200 :num-rounds 1000000)
-;(:KEEP ((T . 5083) (NIL . 994917)))
-;(:SWITCH ((T . 5100) (NIL . 994900)))
+;;(:KEEP ((T . 4897) (NIL . 995103)))
+;;(:SWITCH ((T . 994996) (NIL . 5004)))

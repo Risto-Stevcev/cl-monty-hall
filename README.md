@@ -1,6 +1,7 @@
 # cl-monty-hall
 
-Tests the solution to the [Monty Hall Problem](https://en.m.wikipedia.org/wiki/Monty_Hall_problem) using Monte Carlo
+Tests the solution to the [Monty Hall Problem](https://en.m.wikipedia.org/wiki/Monty_Hall_problem)
+using Monte Carlo
 
 ## Setup
 
@@ -11,29 +12,25 @@ $ make
 ## Results
 
 ```lisp
-; The probability looks like it's how it's stated in the original problem,
-; 2/3 change you get the car if you switch and 1/3 change if you don't switch:
 (run 3 :num-rounds 1000000)
-;(:KEEP ((T . 333019) (NIL . 666981)))
-;(:SWITCH ((T . 666849) (NIL . 333151)))
+;;(:KEEP ((T . 334409) (NIL . 665591)))
+;;(:SWITCH ((T . 666442) (NIL . 333558)))
 
-; However, the difference between choosing the door and not doesn't make much difference at a large
-; enough number:
 (run 4 :num-rounds 1000000)
-;(:KEEP ((T . 249201) (NIL . 750799)))
-;(:SWITCH ((T . 375739) (NIL . 624261)))
+;;(:KEEP ((T . 250303) (NIL . 749697)))
+;;(:SWITCH ((T . 749986) (NIL . 250014)))
 
 (run 5 :num-rounds 1000000)
-;(:KEEP ((T . 199814) (NIL . 800186)))
-;(:SWITCH ((T . 266971) (NIL . 733029)))
+;;(:KEEP ((T . 200124) (NIL . 799876)))
+;;(:SWITCH ((T . 799602) (NIL . 200398)))
 
 (run 20 :num-rounds 1000000)
-;(:KEEP ((T . 49776) (NIL . 950224)))
-;(:SWITCH ((T . 52837) (NIL . 947163)))
+;;(:KEEP ((T . 49878) (NIL . 950122)))
+;;(:SWITCH ((T . 949733) (NIL . 50267)))
 
 (run 200 :num-rounds 1000000)
-;(:KEEP ((T . 5083) (NIL . 994917)))
-;(:SWITCH ((T . 5100) (NIL . 994900)))
+;;(:KEEP ((T . 4897) (NIL . 995103)))
+;;(:SWITCH ((T . 994996) (NIL . 5004)))
 ```
 
 ## License
